@@ -1,0 +1,59 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>PIXI-DEMO</title>
+  <script src="js/pixi.min.js"></script>
+</head>
+<body>
+  <script type="text/javascript">
+    //Aliases
+    let Application = PIXI.Application
+    let loader = PIXI.loader
+    let resources = PIXI.loader.resources
+    let Sprite = PIXI.Sprite
+
+    // app init
+    let app = new Application({
+        width: 256,
+        height: 256,                       
+        antialias: true,
+        transparent: false,
+        resolution: 1
+      }
+    )
+      
+    // viewport
+    document.body.appendChild(app.view)
+
+    // load sprite
+    loader.add("images/cat.png").load(loadFinished)
+
+    // load sprite finished, game starts
+    let cat = null
+    let direct = 1
+    let border = 0
+    function loadFinished() {
+      // set sprite
+      cat = new Sprite(resources["images/cat.png"].texture)
+      app.stage.addChild(cat)
+      border = app.renderer.width - cat.width
+      
+      // start moving
+      app.ticker.add(delta => loop(delta))
+    }
+    
+    // loop
+    function loop(delta) {
+      if (cat.x >= border) {
+        direct = -1
+      }
+      if (cat.x <= 0) {
+        direct = 1
+      }
+      cat.x += direct
+    }
+  </script>
+</body>
+</html>
